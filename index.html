@@ -63,15 +63,12 @@
       }
       .modalBox.depth1 {
         width: 600px;
-        z-index: 5;
       }
       .modalBox.depth2 {
         width: 400px;
-        z-index: 10;
       }
       .modalBox.depth3 {
         width: 200px;
-        z-index: 15;
       }
 
       .modalBox input {
@@ -242,6 +239,7 @@
       const dim = document.querySelector(".dim");
       const modalStack = [];
       const focusStack = [];
+      let zIndex = 1000;
 
       // 스크롤 여부
       const scrollHidden = (isHidden) => {
@@ -318,6 +316,10 @@
           focusStack.push(commandFocus);
         }
 
+        // 모달 열릴때마다 zindex 1씩 증가
+        zIndex++;
+        modals.style.zIndex = zIndex;
+
         modals.classList.add("show");
         dim.classList.add("show");
         scrollHidden(true);
@@ -360,6 +362,10 @@
           return;
         }
 
+        // 모달 닫힐때마다 zindex 원래값으로
+        if (modalStack[modalStack.length - 1] === modals) {
+          zIndex = 1000;
+        }
         modals.classList.remove("show");
 
         // 모달 스택 제거
