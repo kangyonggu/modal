@@ -253,7 +253,7 @@
       };
 
       // 포커스 요소 찾기
-      function focusAble(getActualTarget) {
+      function focusSearch(getActualTarget) {
         if (!getActualTarget) {
           // firstFocusableEl과 lastFocusableEl가 null값을 가지면 return
           return { firstFocusableEl: null, lastFocusableEl: null };
@@ -279,8 +279,8 @@
         // 최근에 연 모달 팝업
         const currentModal = modalStack[modalStack.length - 1];
 
-        // focusAble(currentModal) 함수에서 return된 firstFocusableEl, lastFocusableEl를 가져와서 담음
-        const { firstFocusableEl, lastFocusableEl } = focusAble(currentModal);
+        // focusSearch(currentModal) 함수에서 return된 firstFocusableEl, lastFocusableEl를 가져와서 담음
+        const { firstFocusableEl, lastFocusableEl } = focusSearch(currentModal);
         const isTabEvent = event.key === "Tab";
 
         // isTabEvent가 false면 return
@@ -289,7 +289,6 @@
         }
 
         // 만약 포커스를 받은 요소가 lastFocus 이고 shift + Tab키를 안눌렀으면
-
         const isKeyForward =
           document.activeElement === lastFocusableEl && !event.shiftKey;
         const isKeyBackward =
@@ -311,6 +310,7 @@
 
       // 모달 열렸을때
       function activeModal(modals) {
+        // 모달 오픈 시 해당 버튼 포커스 지정
         const commandFocus = document.activeElement;
 
         // focusing 저장
@@ -326,8 +326,8 @@
         modalStack.push(modals);
 
         // 모달이 열렸을때 포커싱 가능한 첫번째 요소로 이동
-        // focusAble(Modal)에 객체 firstFocusableEl를 변수 지정
-        const { firstFocusableEl } = focusAble(modals);
+        // focusSearch(Modal)에 객체 firstFocusableEl를 변수 지정
+        const { firstFocusableEl } = focusSearch(modals);
         // 만약 firstFocusableEl가 true면
         if (!!firstFocusableEl) {
           // firstFocusableEl에 포커싱
@@ -387,13 +387,13 @@
       closeModal();
 
       // 열린 모달 순차적으로 닫는 함수
-      function popModalStack() {
+      function stackClose() {
         // 최근 모달을 TopModal로 const 지정
-        const TopModal = modalStack[modalStack.length - 1];
+        const latestModal = modalStack[modalStack.length - 1];
         // 만약 TopModal이 true면
-        if (!!TopModal) {
+        if (!!latestModal) {
           // TopModal을 closeEvent
-          deactivateModal(TopModal);
+          deactivateModal(latestModal);
         }
       }
 
@@ -415,7 +415,7 @@
           return;
         }
 
-        popModalStack();
+        stackClose();
         lastModal();
       });
 
@@ -428,7 +428,7 @@
           return;
         }
 
-        popModalStack();
+        stackClose();
         lastModal();
       });
     </script>
