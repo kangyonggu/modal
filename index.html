@@ -357,14 +357,12 @@
 
       // 모달 닫혔을때
       function deactivateModal(modals) {
-        // 현재 닫으려는 모달이 마지막 모달이면
-        if (modalStack[modalStack.length - 1] !== modals) {
-          return;
-        }
-
-        // 모달 닫힐때마다 zindex 원래값으로
+        // 현재 열린 모달이 마지막 모달이면 zindex : 1000추가
         if (modalStack[modalStack.length - 1] === modals) {
           zIndex = 1000;
+          // 현재 닫으려는 모달이 마지막 모달이 아니면 return
+        } else {
+          return;
         }
         modals.classList.remove("show");
 
